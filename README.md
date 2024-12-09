@@ -8,6 +8,46 @@ What are the main differences between Flexbox and Grid layouts? Describe scenari
 
 ### Response 1
 
+`Flexbox` is designed for one dimensional layout, either a row or a column. `Grid` is designed for two-dimensional layout, rows and columns at the same time. There are some key differences between both depending on the complexity of the layout. `Flexbox` is mainly used for simpler, and linear layouts and they allows more flexibility. You can use it for designing navigation menus or aligning content horizontally/vertically. For example:
+
+```html
+<nav class="navbar">
+  <div class="logo">MySite</div>
+  <ul class="nav-links">
+    <li><a href="#home">Home</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+```
+
+```css
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #333;
+  color: white;
+  padding: 10px 20px;
+}
+```
+
+Navigation bar is easily styled with flex/flex-box display property. Here is an example using `Grid` layout:
+
+```css
+.navbar {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  align-items: center;
+  background-color: #333;
+  color: white;
+  padding: 10px 20px;
+}
+```
+
+With `Grid`, you can define a structured layout that divides the navigation bar into three sections: a flexible space for the logo, a section for the links, and another for additional elements like a call-to-action button. This makes `Grid` more suitable for layouts requiring precise positioning of items in two dimensions.
+
 ## Prompt 2
 
 What is the difference between `justify-content` and `align-items` in Flexbox? How does each property control the positioning of flex items within the container?
@@ -25,6 +65,70 @@ Beyond `center`, these properties support values like `flex-start`, `flex-end`, 
 Describe the difference between `grid-template-areas` and `grid-template-columns`/`grid-template-rows`. When might you prefer one approach over the other?
 
 ### Response 3
+
+The main difference is how they define the structure of the grid layout:
+
+1. `grid-template-areas`:
+
+- Allows you to define a grid using named areas with text-based template that visually maps out the arrangement of the elements.
+- It's is more descriptive and visually intuitive, making it easier to understand and manage complex layouts.
+
+```css
+.grid-container {
+  display: grid;
+  grid-template-areas:
+    "header header"
+    "sidebar content"
+    "footer footer";
+  grid-template-columns: 1fr 3fr;
+  grid-template-rows: auto 1fr auto;
+}
+.header {
+  grid-area: header;
+}
+.sidebar {
+  grid-area: sidebar;
+}
+.content {
+  grid-area: content;
+}
+.footer {
+  grid-area: footer;
+}
+```
+
+- `the grid-template-areas` visually maps the layout with clear labels like `header`, `sidebar`, `content`, and `footer`
+
+2. `grid-template-columns`/`grid-template-rows`:
+
+- They define the size of the columns and rows explicitly using measurements without naming and mapping areas.
+- This approach provides precise control over row and column sizes without requiring named areas.
+
+```css
+.grid-container {
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+  grid-template-rows: auto 1fr auto;
+}
+.item1 {
+  grid-column: 1 / 3;
+  grid-row: 1;
+}
+.item2 {
+  grid-column: 1;
+  grid-row: 2;
+}
+.item3 {
+  grid-column: 2;
+  grid-row: 2;
+}
+.item4 {
+  grid-column: 1 / 3;
+  grid-row: 3;
+}
+```
+
+Here, you position items by specifying start and end lines for rows and columns. You would use one method over the other depending on the complexity of your project, and the level of control or clarity you need.
 
 ## Prompt 4
 
@@ -82,3 +186,59 @@ At a first glance, it can be easy to underestimate the value of this approach bu
   - Given the narrow resolution of mobile devices, developers are required to prioritize the most important content of the webpage, which often are critical pieces of information. This ensures that the most important pieces of the webpage are not overlooked.
 - **Visual Hierarchy**
   - Mobile-first design helps developers think about how the website content is organized due to the smaller space available for content. This ensures that the hierarchy of our content is clear and is appropriately prioritized.
+
+#### Take a look at the example below:
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mobile-First Example</title>
+    <style>
+      /* Base styles for mobile (default) */
+      .container {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        padding: 10px;
+      }
+      .box {
+        background-color: #4caf50;
+        color: white;
+        text-align: center;
+        padding: 20px;
+        border-radius: 5px;
+      }
+      /* Styles for larger screens */
+      @media (min-width: 768px) {
+        .container {
+          flex-direction: row;
+          justify-content: space-between;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="box">Box 1</div>
+      <div class="box">Box 2</div>
+      <div class="box">Box 3</div>
+    </div>
+  </body>
+</html>
+```
+
+#### 1. Default Mobile Styles:
+
+- The `.container` uses `flex-direction: column`, stacking the child `.box` elements vertically.
+- A `gap` property is added for spacing between the boxes.
+- This ensures a simple and readable layout optimized for smaller screens.
+
+#### 2. Media Query for Larger Screens:
+
+- The `@media (min-width: 768px)` rule applies styles for devices with a screen width of 768px or larger (e.g., tablets and desktops).
+- The `.container` switches to `flex-direction: row`, aligning the boxes horizontally.
+- `justify-content: space-between` ensures even spacing between the boxes.
+  In our code, default styles are designed for smaller screens, and adjustments are progressively added for larger screens using a media query. This approach ensures that the design is efficient and functional on mobile devices by default. Mobile-first design focuses on prioritizing the needs and constraints of smaller screens, laying a solid foundation before scaling up for larger devices. This approach simplifies the process of adding enhancements for bigger screens. By leveraging media queries, you can build responsive and adaptable layouts that provide a seamless experience across all screen sizes.
